@@ -1,9 +1,5 @@
 package cn.korostudio.sodiumsightdistanceunlocked.mixin;
 
-import cn.hutool.core.io.file.FileWriter;
-import cn.hutool.setting.Setting;
-import de.johni0702.minecraft.bobby.Bobby;
-import de.johni0702.minecraft.bobby.BobbyConfig;
 import me.jellysquid.mods.sodium.client.gui.SodiumGameOptionPages;
 import me.jellysquid.mods.sodium.client.gui.options.*;
 import me.jellysquid.mods.sodium.client.gui.options.control.Control;
@@ -29,22 +25,6 @@ public class SodiumGameOptionPagesMixin {
     @Inject(method = "lambda$general$0",at = @At("HEAD"), cancellable = true)//constant  = @Constant(intValue = 32))
     private static void changeSodiumSetting(OptionImpl option, CallbackInfoReturnable<Control> cir) {
         cir.setReturnValue(new SliderControl(option, 2, 1024, 1, ControlValueFormatter.translateVariable("options.chunks")));
-    }
-    @Inject(method = "lambda$general$1",at = @At("HEAD"))
-    private static void setBobby(GameOptions options, Integer value, CallbackInfo ci){
-        try {
-            Class.forName("de.johni0702.minecraft.bobby.Bobby");
-        } catch (ClassNotFoundException e) {
-            return;
-        }
-        Setting setting = new Setting(System.getProperty("user.dir") + "/config/bobby.conf");
-        setting.set("max-render-distance",value.toString());
-        StringBuilder stringBuilder = new StringBuilder();
-        setting.forEach((key,v)->{
-            stringBuilder.append(key).append('=').append(v).append('\n');
-        });
-        FileWriter fileWriter = new FileWriter(System.getProperty("user.dir") + "/config/bobby.conf");
-        fileWriter.write(stringBuilder.toString());
     }
 
     /*
